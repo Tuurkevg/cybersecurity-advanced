@@ -1,0 +1,20 @@
+#!/bin/bash
+for vm in \
+    "companyrouter" \
+    "dns" \
+    "web" \
+    "database" \
+    "employee" \
+    "isprouter" \
+    "homerouter" \
+    "remote-employee" \
+    "kali-linux-2024.3-virtualbox-amd64"
+do
+    state=$(VBoxManage showvminfo "$vm" --machinereadable | grep -c '^VMState="running"')
+    if [ "$state" -eq 1 ]; then
+        VBoxManage controlvm "$vm" acpipowerbutton
+        echo "Shutting down VM \"$vm\"..."
+    else
+        echo "VM \"$vm\" is not running."
+    fi
+done

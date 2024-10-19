@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cybersec Internal Services</title>
+<style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .content {
+            text-align: center;
+            margin-top: 50px;
+        }
+        button {
+            font-size: 18px;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+        .success {
+            background-color: green;
+            color: white;
+        }
+        .failure {
+            background-color: red;
+            color: white;
+        }
+        img {
+            width: 200px;
+            height: auto;
+        }
+</style>
+</head>
+<body>
+<div class="content">
+<h1>Welcome to cybersec.internal!</h1>
+<img src="https://cdn.pixabay.com/photo/2014/02/13/07/28/security-265130_1280.jpg" alt="Sample Image">
+ 
+<p>Status of our services:</p>
+        {% if is_connected %}
+<button class="success">Successfully connected to the database</button>
+        {% else %}
+<button class="failure">Not able to connect to the database</button>
+        {% endif %}
+</div>
+</body>
+</html>

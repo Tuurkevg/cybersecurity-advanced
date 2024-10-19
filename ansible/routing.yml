@@ -1,0 +1,65 @@
+- name: Configure routing on ISP router
+  hosts: isprouter
+  become: yes
+  tasks:
+    - name: Enable routing
+      ansible.posix.sysctl:
+        name: net.ipv4.ip_forward
+        value: "1"
+        state: present
+        reload: true
+
+    - name: Add a static route for the internal company LAN
+      ansible.builtin.lineinfile:
+        path: /etc/network/interfaces
+        line: "up ip route add 172.30.0.0/16 via 192.168.62.253"
+        state: present
+
+    - name: Add a static route for the employee home LAN
+      ansible.builtin.lineinfile:
+        path: /etc/network/interfaces
+        line: "up ip route add 172.10.10.0/24 via 192.168.62.42"
+        state: present
+
+    - name: Restart networking to apply the static route
+      ansible.builtin.service:
+        name: networking
+        state: restarted
+
+    - name: Install firewall
+      ansible.builtin.package:
+        name: nftables
+        state: present
+
+    - name: Copy firewall configuration
+      ansible.builtin.copy:
+        src: ./files/isprouter/etc/nftables.nft
+        dest: /etc/nftables.nft
+
+    - name: Enable and start firewall
+      ansible.builtin.service:
+        name: nftables
+        enabled: yes
+        state: started
+
+- name: Configure routing on company router
+  hosts: companyrouter
+  become: yes
+  tasks:
+    - name: Enable routing
+      ansible.posix.sysctl:
+        name: net.ipv4.ip_forward
+        value: "1"
+        state: present
+        reload: true
+
+- name: Configure routing on home router
+  hosts: homerouter
+  become: yes
+  tasks:
+    - name: Enable routing
+      ansible.posix.sysctl:
+        name: net.ipv4.ip_forward
+        value: "1"
+        state: present
+        reload: true

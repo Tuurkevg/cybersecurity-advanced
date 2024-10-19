@@ -1,0 +1,11 @@
+[Unit]
+Description = start script for flask app in dev mode
+
+[Service]
+SyslogIdentifier=flaskapp
+Type=simple
+ExecStart = /usr/bin/python /opt/flask/app.py
+User=root
+
+[Install]
+WantedBy = multi-user.target

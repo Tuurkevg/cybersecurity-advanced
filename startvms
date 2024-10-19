@@ -1,0 +1,19 @@
+#!/bin/bash
+for vm in \
+    "companyrouter" \
+    "dns" \
+    "web" \
+    "database" \
+    "employee" \
+    "isprouter" \
+    "homerouter" \
+    "remote-employee" \
+    "kali-linux-2024.3-virtualbox-amd64"
+do
+    state=$(VBoxManage showvminfo "$vm" --machinereadable | grep -c '^VMState="running"')
+    if [ "$state" -eq 0 ]; then
+        VBoxManage startvm "$vm" --type headless
+    else
+        echo "VM \"$vm\" is already running."
+    fi
+done

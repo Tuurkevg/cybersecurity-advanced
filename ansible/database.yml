@@ -1,0 +1,52 @@
+- name: Configure database
+  hosts: database
+  become: yes
+  vars:
+    root_password: rootpassword
+    db_user: toor
+    db_user_password: summer
+    db_name: db_services
+  tasks:
+    - name: Install mysql, client and python connection library
+      ansible.builtin.package:
+        name:
+          - mariadb
+          - mariadb-client
+          - py3-pymysql
+        state: present
+
+    - name: Copy mysql configuration
+      ansible.builtin.copy:
+        src: ./files/database/etc/mariadb-server.cnf
+        dest: /etc/my.cnf.d/mariadb-server.cnf
+
+    - name: Run interactive first mariadb command (this task is not idempotent)
+      ansible.builtin.shell: /etc/init.d/mariadb setup
+
+    - name: Service enabled and started
+      ansible.builtin.service:
+        name: mariadb
+        enabled: yes
+        state: restarted
+
+    - name: Set root password (this task is not idempotent)
+      ansible.builtin.shell: |
+        mariadb -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '{{ root_password }}';"
+        mariadb -u root -p{{ root_password }} -e "FLUSH PRIVILEGES;"
+
+    - name: "create new user {{ db_user }}"
+      community.mysql.mysql_user:
+        name: "{{ db_user }}"
+        password: "{{ db_user_password }}"
+        host: "%"
+        priv: "*.*:ALL"
+        state: present
+        login_user: root
+        login_password: "{{ root_password }}"
+
+    - name: create new database services
+      community.mysql.mysql_db:
+        name: "{{ db_name }}"
+        state: present
+        login_user: root
+        login_password: "{{ root_password }}"

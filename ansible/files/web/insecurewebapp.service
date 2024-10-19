@@ -1,0 +1,11 @@
+[Unit]
+Description = start script for insecurewebapp
+
+[Service]
+SyslogIdentifier=insecurewebapp
+Type=simple
+ExecStart = /usr/bin/java -server -Xms128m -Xmx512m -jar /opt/insecurewebapp/app.jar
+User=root
+
+[Install]
+WantedBy = multi-user.target

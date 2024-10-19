@@ -1,0 +1,11 @@
+- name: Fix alpine machines to boot properly after rebooting
+  hosts: dns, database, employee, remote-employee
+  become: yes
+  gather_facts: no
+  tasks:
+    - name: Change net-online config interface
+      ansible.builtin.lineinfile:
+        path: /etc/conf.d/net-online
+        search_string: 'interfaces="eth0"'
+        line: 'interfaces="eth1"'
+        state: present

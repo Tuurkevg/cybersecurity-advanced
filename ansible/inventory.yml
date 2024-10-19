@@ -1,0 +1,37 @@
+internal_company_lan:
+  hosts:
+    # companyrouter: # Already defined in fake_internet
+    #   ansible_host: 172.30.255.254
+    dns:
+      ansible_host: 172.30.0.4
+    web:
+      ansible_host: 172.30.0.10
+    database:
+      ansible_host: 172.30.0.15
+    employee:
+      ansible_host: 172.30.0.123
+
+fake_internet:
+  hosts:
+    companyrouter:
+      ansible_host: 192.168.62.253
+    isprouter:
+      ansible_host: 192.168.62.254
+    # red:
+    #   ansible_host: 192.168.62.66
+    homerouter:
+      ansible_host: 192.168.62.42
+
+employee_home_lan:
+  hosts:
+    # homerouter: # Already defined in fake_internet
+    #   ansible_host: 172.10.10.254
+    remote_employee:
+      ansible_host: 172.10.10.123
+
+all:
+  vars:
+    ansible_user: vagrant
+    ansible_password: vagrant
+    ansible_ssh_common_args: "-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+    ansible_python_interpreter: auto_silent

@@ -1,0 +1,65 @@
+- name: Ping all hosts in the inventory
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Ping the hosts
+      ansible.builtin.ping:
+      ignore_errors: yes
+
+    - name: Ping google from each host
+      ansible.builtin.shell: ping -c 4 google.com
+      ignore_errors: yes
+
+- name: Check if a website is reachable
+  hosts: isprouter, remote_employee
+  gather_facts: no
+  tasks:
+    - name: Check if the website is reachable
+      uri:
+        url: "http://172.30.0.10"
+        return_content: no
+        validate_certs: no
+      ignore_errors: yes
+
+- name: Check MySQL login
+  hosts: isprouter
+  become: yes
+  gather_facts: no
+  tasks:
+    - name: Install mysql and pymysql
+      ansible.builtin.package:
+        name:
+          - mysql
+          - mysql-client
+          - py3-pymysql
+        state: present
+
+    - name: Check if we can log in to MySQL
+      community.mysql.mysql_db:
+        login_host: 172.30.0.15
+        name: db_services
+        login_user: toor
+        login_password: summer
+        state: present
+      ignore_errors: yes
+
+- name: Check MySQL login
+  hosts: remote_employee
+  become: yes
+  gather_facts: no
+  tasks:
+    - name: Install mysql and pymysql
+      ansible.builtin.package:
+        name:
+          - mysql
+          - python3-PyMySQL
+        state: present
+
+    - name: Check if we can log in to MySQL
+      community.mysql.mysql_db:
+        login_host: 172.30.0.15
+        name: db_services
+        login_user: toor
+        login_password: summer
+        state: present
+      ignore_errors: yes

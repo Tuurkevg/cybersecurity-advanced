@@ -1,0 +1,129 @@
+- name: Install DNS server on ISP router
+  hosts: isprouter
+  become: yes
+  tasks:
+    - name: Install DNS server
+      ansible.builtin.package:
+        name: unbound
+        state: present
+
+    - name: Copy DNS configuration
+      ansible.builtin.copy:
+        src: ./files/isprouter/etc/unbound/unbound.conf
+        dest: /etc/unbound/unbound.conf
+
+    - name: Enable and start DNS server
+      ansible.builtin.service:
+        name: unbound
+        enabled: yes
+        state: started
+
+- name: Configure DNS server in internal company network
+  hosts: dns
+  become: yes
+  tasks:
+    - name: Remove original DNS server
+      ansible.builtin.lineinfile:
+        path: /etc/resolv.conf
+        line: "nameserver 10.0.2.3"
+        state: absent
+
+    - name: Add DNS server
+      ansible.builtin.lineinfile:
+        path: /etc/resolv.conf
+        line: "nameserver 192.168.62.254"
+        state: present
+
+    - name: Install bind
+      ansible.builtin.package:
+        name: bind
+        state: present
+
+    - name: Copy bind config
+      ansible.builtin.copy:
+        src: ./files/dns/etc/named.conf
+        dest: /etc/bind/named.conf
+
+    - name: Copy bind zone file config
+      ansible.builtin.copy:
+        src: ./files/dns/etc/cybersec.internal
+        dest: /var/bind/cybersec.internal
+
+    - name: Enable and start bind
+      ansible.builtin.service:
+        name: named
+        enabled: yes
+        state: restarted
+
+- name: Configure DNS server for alpine hosts in internal company network
+  hosts: database, employee
+  become: yes
+  tasks:
+    - name: Remove original DNS server
+      ansible.builtin.lineinfile:
+        path: /etc/resolv.conf
+        line: "nameserver 10.0.2.3"
+        state: absent
+
+    - name: Remove isp DNS server
+      ansible.builtin.lineinfile:
+        path: /etc/resolv.conf
+        line: "nameserver 192.168.62.254"
+        state: absent
+
+    - name: Add DNS server
+      ansible.builtin.lineinfile:
+        path: /etc/resolv.conf
+        line: "nameserver 172.30.0.4"
+        state: present
+
+- name: Configure DNS server for almalinux hosts in internal company network
+  hosts: web
+  become: yes
+  tasks:
+    - name: Add DNS server address
+      community.general.nmcli:
+        conn_name: System eth1
+        type: ethernet
+        dns4:
+          - 172.30.0.4
+        state: present
+
+    - name: Restart network
+      ansible.builtin.service:
+        name: NetworkManager
+        state: restarted
+
+- name: Configure DNS server for companyrouter in internal company network
+  hosts: companyrouter
+  become: yes
+  tasks:
+    - name: Add DNS server address
+      community.general.nmcli:
+        conn_name: System eth2
+        type: ethernet
+        dns4:
+          - 172.30.0.4
+        state: present
+
+    - name: Restart network
+      ansible.builtin.service:
+        name: NetworkManager
+        state: restarted
+
+- name: Configure DNS server for employee home network
+  hosts: homerouter, remote_employee
+  become: yes
+  tasks:
+    - name: Add DNS server address
+      community.general.nmcli:
+        conn_name: System eth1
+        type: ethernet
+        dns4:
+          - 192.168.62.254
+        state: present
+
+    - name: Restart network
+      ansible.builtin.service:
+        name: NetworkManager
+        state: restarted
