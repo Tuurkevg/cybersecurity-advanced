@@ -146,6 +146,12 @@ table inet filter {
 }
 
 ```
+
+##  isproute rdns doorsturen naar nieuwe ip adres 
+unbounc .cs ip adres van dns server geven
+```
+172.30.1.10
+```
 vervolgens
 ```bash
 sudo nft flush ruleset

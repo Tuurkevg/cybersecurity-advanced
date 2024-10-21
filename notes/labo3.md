@@ -122,7 +122,7 @@ Omdat het een eenvoudige, goedkope manier is om verkeer te versleutelen en te tu
 
 ### Voorbeeld 1: Gebruik port forwarding om de webpagina van de webserver te bekijken via de browser op je laptop:
 run op eigen pc!!
-```ssh -L 8080:172.30.2.10:80 user@192.168.62.253```
+```ssh -L 8080:172.30.2.10:80 vagrant@192.168.62.253```
 
 run op de webserver
 ```ssh -R 8080:172.30.2.10:80 ipvanwaarjewiltdatdiehetkanzienoppoort8080```
