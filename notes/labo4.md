@@ -98,4 +98,4 @@ LISTENMODE=nfqueue
 
 ### An IPS/IDS needs to be tuned thoroughly to prevent alerting fatigue, so it is good that you learn how to write your own rules. Fortunately, there are also rule sets out there that can help you. Read the rule management documentation for Suricata and import the Emerging Threats Open ruleset. Find a way to demonstrate that these additional rules work.
 
-- pas extra regel toe in rule-file
+- pas extra regel toe in rule-file zie root home folder
