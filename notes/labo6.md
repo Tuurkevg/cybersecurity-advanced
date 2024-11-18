@@ -58,8 +58,24 @@
 ## labo
 
 
-### Start of by creating a separate SSH keypair specifically for ansible (we recommend to also create a separate ansible user) and copy over the correct (public or private?) key to the remote locations (which file holds this key on the remote machine?). You can use the vagrant user the first time for creating the ansible user if you do not want to do this manually.
+### voor de ssh keys programma
+`ansible-galaxy collection install ansible.posix`
+
+### 1. Ad-hoc Command to Check Date Consistency
+```isprouter:~/ansible$ ansible all -i inventory.yml -m command -a "date"```
+
+### 2.  Playbook to Pull /etc/passwd Files
 
 
-`ssh-keygen -t rsa -b 4096 -C "ansible@example.com" -f ~/.ssh/ansible_key`
-`sudo adduser ansible`
+### 3 Create a playbook (or ad-hoc command) that creates the user "walt" with password Friday13th! on all Linux machines.
+zie /ansible/labo6/vraag3.vi
+```
+- name: Create user walt on all Linux machines
+  hosts: all
+  become: yes
+  tasks:
+    - name: Ensure user "walt" exists with specified password
+      user:
+        name: walt
+        password: "{{ 'Friday13th!' | password_hash('sha512') }}"
+        ```

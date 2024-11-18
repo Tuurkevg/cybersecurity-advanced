@@ -33,3 +33,15 @@
 
 ## labo
 
+
+
+
+### notities les
+
+wazuh installeren op ubuntu.
+file integrity monitoring
+ossec naam voor wazuh in bestanden
+
+
+wazuh manager =     
+wazuh agent= vertelt wat er verstuurd moet worden naar de wazuh server
