@@ -102,19 +102,21 @@ SSLCertificateFile /home/vagrant/certificates/webserver.crt.pem
 SSLCertificateKeyFile /home/vagrant/certificates/webserver.key.pem
 SSLCACertificateFile /home/vagrant/certificates/rootCA.crt.pem
 ```
-- voer nu dit uit 
+
+- voer nu dit uit
+
 ```bash
 sudo restorecon -R /etc/httpd/conf.d/certificates
 sudo chcon -t httpd_config_t /etc/httpd/conf.d/certificates
 ```
 
-
 - restart
   - `sudo systemctl restart httpd`
 - zet root ca over naar kali red vm
-  - `scp /home/vagrant/ca/rootCA.crt.pem kali@192.168.62.20:/home/kali/` 
+  - `scp /home/vagrant/ca/rootCA.crt.pem kali@192.168.62.20:/home/kali/`
 
 ### extra vragen
+
 - Een **private** key om certificaten te ondertekenen.
 - Een **certificaat** om zichzelf te identificeren.
 - Ja, een webserver gebruikt een **certificaat** om zichzelf te identificeren en veilige verbindingen te waarborgen.
@@ -122,11 +124,14 @@ sudo chcon -t httpd_config_t /etc/httpd/conf.d/certificates
 - Een **CSR** (Certificate Signing Request) is een bestand dat een publieke sleutel en identificatiegegevens bevat, bedoeld om een certificaat aan te vragen bij een CA.
 
 - openssl x509 -in bestandsnaam.crt -text -noout
+
 ### vragen shizzel Webserver: Reverse Proxy
+
 - What software is used for the reverse proxy?
-    - Apache httpd server
+  - Apache httpd server
 - How is the reverse proxy configured?
-    - In /etc/httpd/conf/httpd.conf
+  - In /etc/httpd/conf/httpd.conf
+
     ```bash
     LoadModule proxy_module modules/mod_proxy.so
     LoadModule proxy_http_module modules/mod_proxy_http.so
@@ -140,16 +145,18 @@ sudo chcon -t httpd_config_t /etc/httpd/conf.d/certificates
     ProxyPass "/exec" "http://localhost:8000/exec"
     ProxyPassReverse "/exec" "http://localhost:8000/exec"
     ```
+
 ### **Services Running on /cmd and /services**
 
 1. **Java Service (on `/cmd`)**:
    - **Service Command**: `/usr/bin/java -server -Xms128m -Xmx512m -jar /opt/insecurewebapp/app.jar`
    - **Programming Language**: **Java**
    - **Port**: **8000** (as shown by `lsof` command output)
-   - **Required Files**: 
+   - **Required Files**:
      - `/opt/insecurewebapp/app.jar`
 
-   #### **Command to identify this service**:
+   #### **Command to identify this service**
+
    - `ps -p 647 -o pid,command`
    - `lsof -i :8000`
 
@@ -160,7 +167,47 @@ sudo chcon -t httpd_config_t /etc/httpd/conf.d/certificates
    - **Required Files**:
      - `/opt/flask/app.py`
 
-   #### **Command to identify this service**:
-   - `ps -p 646 -o pid,command`
-   - `ps -p 778 -o pid,command`
-   - `lsof -i :9200`    
+#### Command to identify this service
+
+- `ps -p 646 -o pid,command`
+- `ps -p 778 -o pid,command`
+- `lsof -i :9200`
+
+### extra: Create <https://services.cybersec.internal¶>
+
+- Create a new virtual host in /etc/httpd/conf/httpd.conf at the end of the file
+
+```bash
+<VirtualHost *:443>
+    ServerName services.cybersec.internal
+
+    # SSL Configuration
+    SSLEngine on
+    SSLCertificateFile /etc/httpd/ssl/webserver.crt.pem
+    SSLCertificateKeyFile /etc/httpd/ssl/webserver.key.pem
+
+    # Redirect requests to /services
+    ProxyPass / http://localhost/services/
+    ProxyPassReverse / http://localhost/services/
+
+    # Logging
+    ErrorLog logs/services_error.log
+    CustomLog logs/services_access.log combined
+</VirtualHost>
+```
+
+- Restart the httpd service
+
+```bash
+service httpd restart
+```
+
+- op de dns server doe
+`sudo vi /var/bind/cybersec.internal`
+- voeg dit toe
+
+```bash
+services IN A   172.30.2.10
+```
+
+`sudo service named restart`
