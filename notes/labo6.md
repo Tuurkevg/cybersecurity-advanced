@@ -73,7 +73,7 @@
 
 ### 2.  Playbook to Pull /etc/passwd Files
 
-run dt vanuit de labo 6 map!!
+run dt vanuit de **labo 6 map**!!
 zie de files in passwd!
 ```ansible-playbook -i ../inventory.yml vraag2```
 
@@ -112,7 +112,7 @@ controle:
 ### 4 Create a playbook (or ad-hoc command) that pulls all users that are allowed to log in on all Linux machines
 
 vraag4 run in labo 6 map met
-`ansible-playbook -i ../inventory.yml vraag4`
+`ansible-playbook -i ../inventory.yml vraag4 --limit isprouter`
 
 ```yaml
 ---

@@ -18,6 +18,19 @@
 - **Test je backups**:
   - Controleer regelmatig of je data herstelbaar is.
 
+- 3-2-1-1-0-regel:
+
+  - 3 kopieën van je data.
+  - Op 2 verschillende media.
+  - 1 kopie off-site.
+  - 1 kopie offline of immutable.
+  - 0 fouten na regelmatige tests.
+
+- 4-3-2-regel:
+  - 4 kopieën van je data.
+  - Op 3 verschillende opslaglocaties.
+  - 2 geografisch gescheiden plekken.
+
 ## 2. Verschil tussen Full en Incremental Backups
 
 ### Full Backup

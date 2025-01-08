@@ -39,7 +39,7 @@
 ## labo
 
 voer di tuit op fysieke laptop:
-`ssh -J cr osboxes@172.30.2.11 -L 8081:localhost:443`
+`ssh siem -L 8081:localhost:443`
 surf naar <https://127.0.0.1:8081>
 wazuh manager = 172.30.2.11
 credetianals: `admin`:`OY*Ro7UD1kLlK+m6.lhpycxIUZj68sML`
@@ -48,18 +48,23 @@ logs checken van de agent `sudo tail -f /var/ossec/logs/ossec.log`
 
 directories checken:
 `sudo vi /var/ossec/etc/ossec.conf`
-`<directories check_all="yes">/home/vagrant</directories>`
+`<directories realtime="yes">/home/vagrant</directories>`
 restart wazuh `sudo systemctl restart wazuh-agent`
 check in de gui web FIM -> modified
 
 ### auditd logger
-source: https://wazuh.com/blog/monitoring-root-actions-on-linux-using-auditd-and-wazuh/
+
+source: <https://wazuh.com/blog/monitoring-root-actions-on-linux-using-auditd-and-wazuh/>
+
 - logs auditd `tail -f /var/log/audit/audit.log`
 - herstart auditd" `sudo auditctl -R /etc/audit/rules.d/audit.rules`
 
 - check nu de auditd logs van sudo " <https://127.0.0.1:8081/app/data-explorer/discover#?_q=(filters:!(),query:(language:kuery,query>:''))
 **DEMO**
-- doe sudo systemctl status httpd -> check erna de logs met de link hiebroven. (enkel sudo commandos worden gelogd voor veiligheid)
+- doe `sudo systemctl status httpd` -> check erna de logs met de link hiebroven. (enkel sudo commandos worden gelogd voor veiligheid)
+- uitleg automatisatie met autid, regels in deze file!!
+  - `/etc/audit/rules.d/audit.rules`
+
 
 ### Wat is Regulatory Compliance?
 

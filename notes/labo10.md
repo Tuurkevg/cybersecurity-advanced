@@ -73,6 +73,7 @@ domainname: **arthurgaatslagem.local**
 ### openvpn server isntellen
 
 - `sudo cp /usr/share/doc/openvpn/sample/sample-config-files/server.conf /etc/openvpn/server/`
+  - /etc/openvpn/server/server.conf
 
 ```bash
 server 10.8.0.0 255.255.255.0
@@ -113,7 +114,8 @@ proto udp
 
 ### demo
 
-- company router **sudo openvpn /etc/server/server.conf**
+- company router **sudo openvpn /etc/openvpn/server/server.conf**
 - remote_employee **sudo openvpn /etc/client/client.conf**
 - op kali met ssh **sudo ettercap -Tq -i eth0 -M arp:remote /192.168.62.42// /192.168.62.253//**
+- geef random username op en bij password op backspace drukken
 - remoteployee **ping 172.30.1.4**

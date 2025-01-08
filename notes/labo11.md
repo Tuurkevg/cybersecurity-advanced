@@ -211,3 +211,8 @@ services IN A   172.30.2.10
 ```
 
 `sudo service named restart`
+
+### testen fysiek op host doe
+
+- `ssh -L 8080:127.0.0.1:443 web`
+- controle check `/etc/hosts`

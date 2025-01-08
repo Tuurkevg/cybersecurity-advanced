@@ -49,9 +49,14 @@ en
 `In de ARP poisoning-modus (-M arp:remote), moet je dubbele schuine streepjes (//) achter de IP-adressen gebruiken om Ettercap te vertellen de ARP-poisoning uit te voeren. Een enkele schuine streep (/) wordt gebruikt wanneer je een host of netwerk specificeert in andere delen van het programma of voor reguliere IP-matching.`
 
 ### demo
+```bash
+sudo nft flush ruleset
+sudo nft -f /etc/nftables.conf
+```
+
 onderste 2 beide in vagrant home folder!
-- `ssh cr ->sudo ipsec.sh`
-- `ssh hr -> sudo ipsec.sh`
+- `ssh cr ->sudo ./ipsec.sh`
+- `ssh hr -> sudo ./ipsec.sh`
 ssh kali -> `sudo ettercap -Tq -i eth0 -M arp:remote /192.168.62.42// /192.168.62.253//`
 wireshark-> preferences -> protocols -> esp -> vink **3 bovenste** vakje aan of uit!
 ssh remote_employee -> `ping 172.30.2.10` (web)
