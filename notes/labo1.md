@@ -40,7 +40,7 @@
 - **Downloaden** van file met scp van VM naar fysieke host of kali,..
 - `scp dns:/home/vagrant/authorized_keys /home/arthur/Downloads/`
 - **uplauden** naar vm vanaf de host
-- `/home/arthur/Downloads/authorized_keys scp dns:/home/vagrant/`
+- `scp /home/arthur/Downloads/authorized_keys dns:/home/vagrant/`
 - zorg ervoor dat alleen http verkeer van specifieke host gecaptured wordt met tcp dump:
 - `sudo tcpdump -i [interface] port 80 and host [webserver-ip]`
 
