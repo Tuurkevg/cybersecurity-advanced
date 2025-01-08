@@ -1,4 +1,6 @@
-# theorie
+# labo 4 ids/ips
+
+## theorie
 
 1. **Wat is het verschil tussen een IDS en een IPS?**  
    - Een IDS detecteert bedreigingen zonder in te grijpen, terwijl een IPS direct actie onderneemt om bedreigingen te blokkeren.
@@ -21,7 +23,7 @@
    - Security Onion is een open-source platform voor netwerkmonitoring en bedreigingsdetectie, bedoeld om beveiligingsincidenten te detecteren en beheren.
    - fysieke apparatuur met alle apparatuur en tools en software om te helpen voor netwerk te beveiligen. zoals wazoo en andere apparatuur.
 
-# labo
+## labo
 
 ### we gaan alles van de ids en ips zetten op de router want daar komt all het interessante verkeer vandaan
 
@@ -36,7 +38,7 @@
 
 ### Create a rule that alerts as soon as a ping is performed between two machines (for example red and THE WEB)
 
-**sudo nano /etc/suricata/my.rules**
+- **sudo nano /root/my.rules**
 
 ```bash
 alert icmp 172.30.2.10 any <> 192.168.62.20 any (msg:"Ping detected between web and redmvm"; itype:8; sid:1000002; rev:2;)
@@ -52,7 +54,8 @@ rule-files:
 ```
 
 `sudo suricata -c /etc/suricata/suricata.yaml -i eth3 -i eth1 -i eth2 -i eth0`
-
+do e: CTRL+Z
+`bg 1`
 - vervolgens ping van kali of van web naar de andere! en check de logs in:
   - `sudo tail -F /var/log/suricata/fast.log`
 
@@ -88,6 +91,7 @@ rule-files:
 af-packet:
 # LISTENMODE=af-packet
 LISTENMODE=nfqueue
+ips-mode: yes
 ```
 
 ### verschil tussen firewall en ids/ips
